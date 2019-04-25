@@ -8,16 +8,3 @@ export class Post {
     }
 }
 
-
-export class PostResponseModel {
-    message: string;
-    posts: Post[];
-
-    constructor(...models: Partial<PostResponseModel>[]) {
-        Object.assign(this, ...models);
-
-        if (this.posts) {
-            this.posts = this.posts.map(r => new Post(r));
-        }
-    }
-}

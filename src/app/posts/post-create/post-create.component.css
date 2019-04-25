@@ -6,3 +6,7 @@ textarea {
     display: block;
     margin-top: 1em;
 }
+
+mat-spinner {
+    margin: auto;
+}
