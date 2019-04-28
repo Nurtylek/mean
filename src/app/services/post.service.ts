@@ -54,8 +54,8 @@ export class PostService {
     updatePost(post: Post) {
         this.http.put(`${this.apiUrl}/posts/${post.id}`, post).subscribe(() => {
             const updatedPosts = [...this.posts];
-            const oldPostIndex = updatedPosts.findIndex(p => p.id === post.id);
-            updatedPosts[oldPostIndex] = post;
+            // const oldPostIndex = updatedPosts.findIndex(p => p.id === post.id);
+            // updatedPosts[oldPostIndex] = post;
             this.posts = updatedPosts;
             this.postUpdated.next([...this.posts]);
             this.router.navigate(['/']);
