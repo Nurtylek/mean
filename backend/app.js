@@ -1,3 +1,5 @@
+// path if you wanna allow to retrieve images from your front(etc)
+const path = require('path');
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -16,6 +18,8 @@ mongoose.connect("mongodb+srv://Nurtylek:UKrq5RNM6TJKLeP@node-angular-rdwny.mong
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+// to allow images(folder) we need to add, to retrieve
+app.use('/images', express.static(path.join('backend/images')));
 
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");

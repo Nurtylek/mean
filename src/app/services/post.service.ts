@@ -1,10 +1,9 @@
-import {Injectable} from '@angular/core';
-import {Post} from '../core/post.model';
-import {Subject} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
-import {environment} from '../../environments/environment';
-import {map} from 'rxjs/operators';
-import {Router} from '@angular/router';
+import { Injectable } from '@angular/core';
+import { Post } from '../core/post.model';
+import { Subject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { Router } from '@angular/router';
 
 @Injectable({
     providedIn: 'root'
@@ -18,18 +17,9 @@ export class PostService {
 
     getPosts() {
         // return [...this.posts];
-        this.http.get<{message: string, posts: any[]}>(`${this.apiUrl}/posts`).pipe(
-            map((postData) => {
-                return postData.posts.map(post => {
-                    return {
-                        title: post.title,
-                        content: post.title,
-                        id: post._id
-                    };
-                });
-            })
+        this.http.get<{ message: string, posts: Post[] }>(`${this.apiUrl}/posts`).pipe(
         ).subscribe((data) => {
-            this.posts = data;
+            this.posts = data.posts;
             this.postUpdated.next([...this.posts]);
         });
     }
@@ -39,12 +29,21 @@ export class PostService {
     }
 
     getPostById(id: string) {
-        return this.http.get<{_id: string , title: string, content: string}>(`${this.apiUrl}/posts/${id}`);
+        return this.http.get<{ _id: string, title: string, content: string, imagePath: string }>(`${this.apiUrl}/posts/${id}`);
     }
 
-    addPost(post: Post) {
-        this.http.post<{message: string, postId: string}>(`${this.apiUrl}/posts`, post).subscribe((data) => {
-            post.id = data.postId;
+    addPost(postModel: Post) {
+        const postData = new FormData();
+        postData.append('title', postModel.title);
+        postData.append('content', postModel.content);
+        postData.append('image', postModel.image, postModel.title);
+        this.http.post<{ message: string, post: Post }>(`${this.apiUrl}/posts`, postData).subscribe(data => {
+            const post =  new Post({
+                _id: data.post._id,
+                title: data.post.title,
+                content: data.post.content,
+                imagePath: data.post.imagePath
+            });
             this.posts.push(post);
             this.postUpdated.next([...this.posts]);
             this.router.navigate(['/']);
@@ -52,7 +51,15 @@ export class PostService {
     }
 
     updatePost(post: Post) {
-        this.http.put(`${this.apiUrl}/posts/${post.id}`, post).subscribe(() => {
+        let postData: FormData;
+        if (typeof (post.image) === 'object') {
+            postData = new FormData();
+            postData.append('id', post._id);
+            postData.append('title', post.title);
+            postData.append('content', post.content);
+            postData.append('image', post.image, post.title);
+        }
+        this.http.put(`${this.apiUrl}/posts/${post._id}`, postData).subscribe(() => {
             const updatedPosts = [...this.posts];
             // const oldPostIndex = updatedPosts.findIndex(p => p.id === post.id);
             // updatedPosts[oldPostIndex] = post;
@@ -63,8 +70,8 @@ export class PostService {
     }
 
     deletePost(postId: string) {
-        this.http.delete<{message: string}>(`${this.apiUrl}/posts/${postId}`).subscribe(() => {
-            this.posts = this.posts.filter(post => post.id !== postId);
+        this.http.delete<{ message: string }>(`${this.apiUrl}/posts/${postId}`).subscribe(() => {
+            this.posts = this.posts.filter(post => post._id !== postId);
             this.postUpdated.next([...this.posts]);
         });
     }
