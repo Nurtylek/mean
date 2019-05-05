@@ -3,10 +3,13 @@ const path = require('path');
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+// log information
+const morgan = require("morgan");
 
 const postsRoutes = require("./routes/posts");
 
 const app = express();
+app.use(morgan("dev"));
 
 mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@node-angular-rdwny.mongodb.net/${process.env.MONGO_DB}?retryWrites=true`)
     .then(() => {
@@ -34,6 +37,24 @@ app.use((req, res, next) => {
     next();
 });
 
+
+// Routes which should handle requests
 app.use("/api/posts", postsRoutes);
+
+// handle errors if it is incorrect request
+app.use((req, res, next) => {
+    const error = new Error("Not found");
+    error.status = 404;
+    next(error);
+});
+
+app.use((error, req, res, next) => {
+    res.status(error.status || 500);
+    res.json({
+        error: {
+            message: error.message
+        }
+    })
+});
 
 module.exports = app;
