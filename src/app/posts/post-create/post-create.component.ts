@@ -43,7 +43,7 @@ export class PostCreateComponent implements OnInit {
                         content: this.post.content,
                         image: this.post.imagePath
                     });
-                }, 500);
+                }, 600);
             } else {
                 this.mode = 'create';
                 this.postId = null;
