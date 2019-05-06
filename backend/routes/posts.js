@@ -34,29 +34,32 @@ const storage = multer.diskStorage({
 router.post(
     "",
     multer({ storage: storage }).single("image"),
-    (req, res, next) => {
+    async (req, res, next) => {
         const url = req.protocol + "://" + req.get("host");
         const post = new Post({
             title: req.body.title,
             content: req.body.content,
             imagePath: url + "/images/" + req.file.filename
         });
-        post.save().then(createdPost => {
+        try {
+            const createdPost = await post.save();
             res.status(201).json({
-                message: "Post added successfully",
+                message: "Post created",
                 post: {
                     ...createdPost._doc,
-                    id: createdPost._doc._id
+                    id: createdPost._id
                 }
-            });
-        });
+            })
+        } catch (error) {
+
+        }
     }
 );
 
 router.put(
     "/:id",
     multer({ storage: storage }).single("image"),
-    (req, res, next) => {
+    async (req, res, next) => {
         let imagePath = req.body.imagePath;
         if (req.file) {
             const url = req.protocol + "://" + req.get("host");
@@ -68,49 +71,60 @@ router.put(
             content: req.body.content,
             imagePath: imagePath
         });
-        Post.updateOne({ _id: req.params.id }, post).then(result => {
-            res.status(204).json({ message: "Update successful!" });
-        });
+
+        try {
+            await Post.updateOne({ _id: req.params.id }, post);
+            res.status(204).json({ message: "Updated successfully" })
+        } catch (error) {
+
+        }
     }
 );
 
-router.get("", (req, res, next) => {
+router.get("", async (req, res, next) => {
     // req.query
     const pageSize = +req.query.pageSize;
     const currentPage = +req.query.page;
     const postQuery = Post.find();
-    let fetchedPosts;
 
     if (pageSize && currentPage !== undefined) {
         postQuery.skip(pageSize * (currentPage - 1)) // 10 * (2-1)
-                 .limit(pageSize)
+            .limit(pageSize)
     }
-    postQuery.then(documents => {
-        fetchedPosts = documents;
-        return Post.countDocuments();
-    }).then(count => {
+
+    try {
+        const docs = await postQuery;
+        const count = await Post.countDocuments();
         res.status(200).json({
-            message: "Posts fetched successfully!",
-            posts: fetchedPosts,
+            message: "Posts fetched successfully",
+            posts: docs,
             maxPosts: count
-        });
-    });
+        })
+    } catch (error) {
+        console.log(error);
+    }
 });
 
-router.get("/:id", (req, res, next) => {
-    Post.findById(req.params.id).then(post => {
+router.get("/:id", async (req, res, next) => {
+    try {
+        const post = await Post.findById(req.params.id);
         if (post) {
-            res.status(200).json(post);
+            res.status(200).json(post)
         } else {
-            res.status(404).json({ message: "Post not found!" });
+            res.status(404).json({ message: "Post not found" })
         }
-    });
+    } catch (error) {
+        console.log(error);
+    }
 });
 
-router.delete("/:id", (req, res, next) => {
-    Post.deleteOne({ _id: req.params.id }).then(result => {
-        res.status(204).json({ message: "Post deleted!" });
-    });
+router.delete("/:id", async (req, res, next) => {
+    try {
+        await Post.remove({ _id: req.params.id });
+        res.status(204).json({ message: "Post deleted" })
+    } catch (error) {
+        console.log(error);
+    }
 });
 
 module.exports = router;
