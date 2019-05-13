@@ -18,6 +18,7 @@ export class SigninComponent extends Abstract implements OnInit {
 
     onLogin(loginForm: NgForm) {
         if (loginForm.invalid) {return; }
+        this.isLoading = true;
         const model = new SignInUpRM({
             email: loginForm.value.email,
             password: loginForm.value.password

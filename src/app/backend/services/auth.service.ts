@@ -3,6 +3,7 @@ import { API_URL } from '../../helpers/helper';
 import { HttpClient } from '@angular/common/http';
 import { SignInUpRM } from '../../core';
 import { Subject } from 'rxjs';
+import {Router} from '@angular/router';
 
 @Injectable({
     providedIn: 'root'
@@ -10,10 +11,12 @@ import { Subject } from 'rxjs';
 export class AuthService {
     private isAuthenticated = false;
     private token: string;
+    private tokenTimer: any;
     private authStatusListenter = new Subject<boolean>();
 
     constructor(@Inject(API_URL) private apiUrl: string,
-        private http: HttpClient) { }
+                private http: HttpClient,
+                private router: Router) { }
 
     getToken() {
         return this.token;
@@ -34,12 +37,25 @@ export class AuthService {
     }
 
     login(model: SignInUpRM) {
-        this.http.post<{ token: string }>(`${this.apiUrl}/user/login`, model).subscribe(res => {
+        this.http.post<{ token: string, expiresIn }>(`${this.apiUrl}/user/login`, model).subscribe(res => {
             this.token = res.token;
             if (this.token) {
+                const expiresInDuration = res.expiresIn;
+                this.tokenTimer = setTimeout(() => {
+                    this.logout();
+                }, expiresInDuration * 1000);
                 this.isAuthenticated = true;
                 this.authStatusListenter.next(true);
+                this.router.navigate(['/']);
             }
         });
+    }
+
+    logout() {
+        this.token = null;
+        this.isAuthenticated = false;
+        this.authStatusListenter.next(false);
+        clearTimeout(this.tokenTimer);
+        this.router.navigate(['/']);
     }
 }
