@@ -14,6 +14,7 @@ export class HeaderComponent extends Abstract implements OnInit, OnDestroy {
     constructor(injector: Injector) { super(injector); }
 
     ngOnInit() {
+        this.userIsAuthenticated = this.backend.authService.getIsAuth();
         this.authListenerSubs = this.backend.authService.getAuthStatusListener().subscribe(isAuth => {
             this.userIsAuthenticated = isAuth;
         });

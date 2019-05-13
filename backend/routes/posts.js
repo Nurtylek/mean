@@ -71,7 +71,7 @@ router.put(
             _id: req.body.id,
             title: req.body.title,
             content: req.body.content,
-            imagePath: imapgePath
+            imagePath: imagePath
         });
 
         try {
