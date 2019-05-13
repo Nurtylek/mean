@@ -1,8 +1,8 @@
-import {Component, Injector, OnDestroy, OnInit} from '@angular/core';
-import {Subscription} from 'rxjs';
-import {PageEvent} from '@angular/material';
-import {Post} from '../../core';
-import {Abstract} from '../abstract';
+import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { PageEvent } from '@angular/material';
+import { Post } from '../../core';
+import { Abstract } from '../abstract';
 
 @Component({
     selector: 'app-post-list',
@@ -18,18 +18,23 @@ export class PostListComponent extends Abstract implements OnInit, OnDestroy {
     postsPerPage = 2;
     currentPage = 1;
     pageSizeOptions = [1, 2, 5, 10];
+    isUserAuth = false;
 
-    constructor(injector: Injector) {super(injector); }
+    constructor(injector: Injector) { super(injector); }
 
     ngOnInit() {
         this.isLoading = true;
         this.backend.postService.getPosts(this.postsPerPage, this.currentPage);
-        this.subscription = this.backend.postService.getPostUpdateListener().subscribe((postData: {posts: Post[], postCount: number}) => {
+        this.subscription = this.backend.postService.getPostUpdateListener().subscribe((postData: { posts: Post[], postCount: number }) => {
             this.isLoading = false;
             this.posts = postData.posts;
             this.totalPosts = postData.postCount;
         }, error => {
             console.log(error);
+        });
+        this.isUserAuth = this.backend.authService.getIsAuth();
+        this.backend.authService.getAuthStatusListener().subscribe(isAuth => {
+            this.isUserAuth = isAuth;
         });
     }
 

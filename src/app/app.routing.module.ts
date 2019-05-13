@@ -15,6 +15,13 @@ const routes: Routes = [
     {
         path: 'edit/:postId',
         component: PostCreateComponent
+    },
+    {
+        path: 'auth',
+        loadChildren: './auth/auth.module#AuthModule'
+    },
+    {
+        path: '**', redirectTo: '', pathMatch: 'full'
     }
 ];
 

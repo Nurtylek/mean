@@ -13,3 +13,7 @@ a {
 .space {
     flex: 1 1 0;
 }
+
+ul {
+    display: flex;
+}

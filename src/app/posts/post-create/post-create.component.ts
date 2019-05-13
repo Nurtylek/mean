@@ -1,7 +1,7 @@
 import {Component, Injector, OnInit} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ParamMap } from '@angular/router';
-import { mymeType } from './myme-type.validator';
+import { mymeType } from './mime-type.validator';
 import {CreatePostRM, PostResponseModel, UpdatePostRM} from '../../core';
 import {Abstract} from '../abstract';
 
