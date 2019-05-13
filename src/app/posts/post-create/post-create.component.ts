@@ -1,24 +1,24 @@
-import { Component, OnInit } from '@angular/core';
-import { Post } from '../../core/post.model';
+import {Component, Injector, OnInit} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { PostService } from '../../services/post.service';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ParamMap } from '@angular/router';
 import { mymeType } from './myme-type.validator';
+import {CreatePostRM, PostResponseModel, UpdatePostRM} from '../../core';
+import {Abstract} from '../abstract';
 
 @Component({
     selector: 'app-post-create',
     templateUrl: './post-create.component.html',
     styleUrls: ['./post-create.component.css']
 })
-export class PostCreateComponent implements OnInit {
+export class PostCreateComponent extends Abstract implements OnInit {
     private mode = 'create';
     private postId: string;
-    post: Post;
+    post: PostResponseModel;
     isLoading = false;
     form: FormGroup;
     imagePreview: string;
 
-    constructor(private postService: PostService, private route: ActivatedRoute) { }
+    constructor(injector: Injector) {super(injector); }
 
     ngOnInit() {
         this.createForm();
@@ -27,10 +27,10 @@ export class PostCreateComponent implements OnInit {
                 this.mode = 'edit';
                 this.postId = paramMap.get('postId');
                 this.isLoading = true;
-                this.postService.getPostById(this.postId).subscribe(postData => {
+                this.backend.postService.getPostById(this.postId).subscribe(postData => {
                     this.isLoading = false;
 
-                    this.post = new Post({
+                    this.post = new PostResponseModel({
                         _id: postData._id,
                         title: postData.title,
                         content: postData.content,
@@ -63,17 +63,22 @@ export class PostCreateComponent implements OnInit {
         if (!this.form.valid) {
             return;
         }
-        const post = new Post({
+        const post = new CreatePostRM({
             title: this.form.value.title,
             content: this.form.value.content,
-            _id: this.postId,
             image: this.form.value.image
+        });
+        const postToUpdate = new UpdatePostRM({
+            title: this.form.value.title,
+            content: this.form.value.content,
+            image: this.form.value.image,
+            _id: this.postId
         });
         this.isLoading = true;
         if (this.mode === 'create') {
-            this.postService.addPost(post);
+            this.backend.postService.addPost(post);
         } else {
-            this.postService.updatePost(post);
+            this.backend.postService.updatePost(postToUpdate);
         }
         this.form.reset();
     }
