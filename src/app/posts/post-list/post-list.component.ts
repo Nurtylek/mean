@@ -13,6 +13,7 @@ export class PostListComponent extends Abstract implements OnInit, OnDestroy {
     posts: Post[] = [];
     private subscription: Subscription;
     isLoading = false;
+    userId: string;
     // pagination
     totalPosts = 0;
     postsPerPage = 2;
@@ -25,6 +26,7 @@ export class PostListComponent extends Abstract implements OnInit, OnDestroy {
     ngOnInit() {
         this.isLoading = true;
         this.backend.postService.getPosts(this.postsPerPage, this.currentPage);
+        this.userId = this.backend.authService.getUserId();
         this.subscription = this.backend.postService.getPostUpdateListener().subscribe((postData: { posts: Post[], postCount: number }) => {
             this.isLoading = false;
             this.posts = postData.posts;
@@ -35,6 +37,7 @@ export class PostListComponent extends Abstract implements OnInit, OnDestroy {
         this.isUserAuth = this.backend.authService.getIsAuth();
         this.backend.authService.getAuthStatusListener().subscribe(isAuth => {
             this.isUserAuth = isAuth;
+            this.userId = this.backend.authService.getUserId();
         });
     }
 

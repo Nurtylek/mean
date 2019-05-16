@@ -1,6 +1,5 @@
 const express = require("express");
 const multer = require("multer");
-
 const isAuth = require("../middleware/check-auth");
 
 const Post = require("../models/post");
@@ -41,7 +40,8 @@ router.post(
         const post = new Post({
             title: req.body.title,
             content: req.body.content,
-            imagePath: url + "/images/" + req.file.filename
+            imagePath: url + "/images/" + req.file.filename,
+            creator: req.userData.userId
         });
         try {
             const createdPost = await post.save();
@@ -53,7 +53,7 @@ router.post(
                 }
             })
         } catch (error) {
-
+            throw new Error("Error");
         }
     }
 );
@@ -71,12 +71,16 @@ router.put(
             _id: req.body.id,
             title: req.body.title,
             content: req.body.content,
-            imagePath: imagePath
+            imagePath: imagePath,
+            creator: req.userData.userId
         });
-
         try {
-            await Post.updateOne({ _id: req.params.id }, post);
-            res.status(204).json({ message: "Updated successfully" })
+            const result = await Post.updateOne({ _id: req.params.id, creator: req.userData.userId }, post);
+            if (result.nModified > 0) {
+                res.status(204).json({ message: "Updated successfully" })
+            } else {
+                res.status(401).json({message: "Auth failed"})
+            }
         } catch (error) {
 
         }
@@ -122,8 +126,12 @@ router.get("/:id", async (req, res, next) => {
 
 router.delete("/:id", isAuth, async (req, res, next) => {
     try {
-        await Post.remove({ _id: req.params.id });
-        res.status(204).json({ message: "Post deleted" })
+        const result = await Post.remove({ _id: req.params.id, creator: req.userData.userId });
+        if (result.n > 0) {
+            res.status(204).json({ message: "Post deleted" })
+        } else {
+            res.status(401).json({message: "Auth failed"});
+        }
     } catch (error) {
         console.log(error);
     }

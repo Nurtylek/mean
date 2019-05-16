@@ -34,7 +34,8 @@ export class PostCreateComponent extends Abstract implements OnInit {
                         _id: postData._id,
                         title: postData.title,
                         content: postData.content,
-                        imagePath: null
+                        imagePath: null,
+                        creator: postData.creator
                     });
                 });
                 setTimeout(() => {
@@ -72,7 +73,8 @@ export class PostCreateComponent extends Abstract implements OnInit {
             title: this.form.value.title,
             content: this.form.value.content,
             image: this.form.value.image,
-            _id: this.postId
+            _id: this.postId,
+            creator: null
         });
         this.isLoading = true;
         if (this.mode === 'create') {

@@ -7,6 +7,7 @@ export class Post {
     content: string;
     imagePath: string;
     image: File;
+    creator: string;
 
     constructor(...models: Partial<Post>[]) {
         Object.assign(this, ...models);
@@ -35,7 +36,7 @@ export class PostResponseModel {
     title: string;
     content: string;
     imagePath: string;
-
+    creator: string;
     constructor(...models: Partial<PostResponseModel>[]) {
         Object.assign(this, ...models);
     }
@@ -68,7 +69,7 @@ export class UpdatePostRM {
     content: string;
     imagePath: string;
     image: File;
-
+    creator: string;
     constructor(...models: Partial<UpdatePostRM>[]) {
         Object.assign(this, ...models);
     }

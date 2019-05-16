@@ -23,6 +23,7 @@ export class PostService {
             .pipe(
                 map(r => r ? new PostsResponseModel(r) : null)
             ).subscribe((data) => {
+            console.log(data);
             this.posts = data.posts;
             this.postUpdated.next({posts: [...this.posts], postCount: data.maxPosts});
         });
