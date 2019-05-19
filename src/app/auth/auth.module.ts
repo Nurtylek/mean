@@ -5,14 +5,7 @@ import { AuthRoutingModule } from './auth-routing.module';
 import { SignupComponent } from './signup/signup.component';
 import { SigninComponent } from './signin/signin.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {
-    MatButtonModule,
-    MatCardModule,
-    MatExpansionModule,
-    MatInputModule, MatPaginatorModule,
-    MatProgressSpinnerModule,
-    MatToolbarModule
-} from '@angular/material';
+import {AngularMaterialModule} from '../shared/angular-material.module';
 
 @NgModule({
     declarations: [SignupComponent, SigninComponent],
@@ -21,13 +14,7 @@ import {
         AuthRoutingModule,
         FormsModule,
         ReactiveFormsModule,
-        MatToolbarModule,
-        MatInputModule,
-        MatCardModule,
-        MatButtonModule,
-        MatExpansionModule,
-        MatProgressSpinnerModule,
-        MatPaginatorModule,
+        AngularMaterialModule
     ]
 })
 export class AuthModule { }
