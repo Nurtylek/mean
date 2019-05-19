@@ -2,6 +2,7 @@
     "env": {
         "MONGO_USER": "Nurtylek",
         "MONGO_PASSWORD": "1TpmDdIZ3Z4luXPg",
-        "MONGO_DB": "mean"
+        "MONGO_DB": "mean",
+        "JWT_KEY": "this should be longer"
     }
 }
