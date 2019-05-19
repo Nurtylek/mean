@@ -1,4 +1,4 @@
-import {Component, Injector, OnInit} from '@angular/core';
+import {Component, Injector, OnDestroy, OnInit} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ParamMap } from '@angular/router';
 import { mymeType } from './mime-type.validator';
@@ -11,7 +11,7 @@ import {Subscription} from 'rxjs';
     templateUrl: './post-create.component.html',
     styleUrls: ['./post-create.component.css']
 })
-export class PostCreateComponent extends Abstract implements OnInit {
+export class PostCreateComponent extends Abstract implements OnInit, OnDestroy {
     private mode = 'create';
     private postId: string;
     post: PostResponseModel;
@@ -101,5 +101,10 @@ export class PostCreateComponent extends Abstract implements OnInit {
             this.imagePreview = reader.result as string;
         };
         reader.readAsDataURL(file);
+    }
+
+    ngOnDestroy(): void {
+        super.ngOnDestroy();
+        this.authStatusSub.unsubscribe();
     }
 }
