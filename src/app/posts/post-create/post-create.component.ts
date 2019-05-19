@@ -4,6 +4,7 @@ import { ParamMap } from '@angular/router';
 import { mymeType } from './mime-type.validator';
 import {CreatePostRM, PostResponseModel, UpdatePostRM} from '../../core';
 import {Abstract} from '../abstract';
+import {Subscription} from 'rxjs';
 
 @Component({
     selector: 'app-post-create',
@@ -17,10 +18,16 @@ export class PostCreateComponent extends Abstract implements OnInit {
     isLoading = false;
     form: FormGroup;
     imagePreview: string;
+    private authStatusSub: Subscription;
 
     constructor(injector: Injector) {super(injector); }
 
     ngOnInit() {
+
+        this.authStatusSub = this.backend.authService.getAuthStatusListener().subscribe(authStatus => {
+            this.isLoading = false;
+        });
+
         this.createForm();
         this.route.paramMap.subscribe((paramMap: ParamMap) => {
             if (paramMap.has('postId')) {

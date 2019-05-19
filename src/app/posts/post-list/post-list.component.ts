@@ -52,6 +52,8 @@ export class PostListComponent extends Abstract implements OnInit, OnDestroy {
         this.backend.postService.deletePost(postId).subscribe(() => {
             this.backend.postService.getPosts(this.postsPerPage, this.currentPage);
             // this.posts = this.posts.filter(post => post._id !== postId);
+        }, error => {
+            this.isLoading = false;
         });
     }
 

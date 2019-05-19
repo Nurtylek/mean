@@ -37,7 +37,10 @@ export class AuthService {
 
     register(model: SignInUpRM) {
         this.http.post(`${this.apiUrl}/user/signup`, model).subscribe(res => {
-            console.log(res);
+            this.router.navigate(['/']);
+        }, error => {
+            this.authStatusListener.next(false);
+            console.log(error);
         });
     }
 
@@ -56,6 +59,9 @@ export class AuthService {
                 this.saveAuthData(this.token, expirationDate, this.userId);
                 this.router.navigate(['/']);
             }
+        }, error => {
+            this.authStatusListener.next(false);
+            console.log(error);
         });
     }
 

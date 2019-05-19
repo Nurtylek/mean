@@ -53,7 +53,9 @@ router.post(
                 }
             })
         } catch (error) {
-            throw new Error("Error");
+            res.status(500).json({
+                message: "Creating a post failed!"
+            })
         }
     }
 );
@@ -82,7 +84,9 @@ router.put(
                 res.status(401).json({message: "Auth failed"})
             }
         } catch (error) {
-
+            res.status(500).json({
+                message: "Couldn't update post"
+            })
         }
     }
 );
@@ -107,7 +111,9 @@ router.get("", async (req, res, next) => {
             maxPosts: count
         })
     } catch (error) {
-        console.log(error);
+        res.status(500).json({
+            message: "Fetching posts failed!"
+        })
     }
 });
 
@@ -120,7 +126,9 @@ router.get("/:id", async (req, res, next) => {
             res.status(404).json({ message: "Post not found" })
         }
     } catch (error) {
-        console.log(error);
+        res.status(500).json({
+            message: "Fetching post failed!"
+        })
     }
 });
 
@@ -133,7 +141,9 @@ router.delete("/:id", isAuth, async (req, res, next) => {
             res.status(401).json({message: "Auth failed"});
         }
     } catch (error) {
-        console.log(error);
+        res.status(500).json({
+            message: "Couldn't delete post!"
+        })
     }
 });
 
