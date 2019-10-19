@@ -7,6 +7,7 @@ import {
     MatProgressSpinnerModule,
     MatToolbarModule
 } from '@angular/material';
+import { AlertComponent } from './alert/alert.component';
 
 @NgModule({
     exports: [
@@ -17,8 +18,10 @@ import {
         MatExpansionModule,
         MatProgressSpinnerModule,
         MatPaginatorModule,
-        MatDialogModule
-    ]
+        MatDialogModule,
+        AlertComponent
+    ],
+    declarations: [AlertComponent]
 })
 export class AngularMaterialModule {
 

@@ -8,6 +8,7 @@ import {BackendModule} from './backend';
 import {ErrorComponent} from './error/error.component';
 import {AngularMaterialModule} from './shared/angular-material.module';
 import {PostsModule} from './posts/posts.module';
+import {environment} from '../environments/environment';
 
 @NgModule({
     declarations: [
@@ -22,7 +23,7 @@ import {PostsModule} from './posts/posts.module';
         AngularMaterialModule,
         PostsModule,
         BackendModule.forRoot({
-            apiUrl: 'http://localhost:3500/api'
+            apiUrl: environment.apiUrl
         })
     ],
     entryComponents: [

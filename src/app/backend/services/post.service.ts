@@ -3,8 +3,8 @@ import {CreatePostResponseModel, CreatePostRM, Post, PostResponseModel, PostsRes
 import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import {API_URL} from '../../helpers/helper';
 import {map} from 'rxjs/operators';
+import {API_URL} from '../../helpers/helpers';
 
 @Injectable({
     providedIn: 'root'

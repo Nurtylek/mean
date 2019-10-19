@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent} from '@angular/common/http';
+import {HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import {MatDialog} from '@angular/material';
@@ -13,15 +13,15 @@ export class ErrorInterceptor implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(req)
             .pipe(
-                catchError(error => {
+                catchError((error: HttpErrorResponse) => {
                     let errorMessage = 'An unknown error occurred!';
                     if (error.error.message) {
                         errorMessage =  error.error.message;
                     }
-                    this.matDialog.open(ErrorComponent, {data: {
-                            message: errorMessage
-                        }});
-                    return throwError(error);
+                    // this.matDialog.open(ErrorComponent, {data: {
+                    //         message: errorMessage
+                    //     }});
+                    return throwError(error.error);
                 })
             );
     }

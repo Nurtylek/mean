@@ -1,12 +1,12 @@
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { ModuleWithProviders, NgModule} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ErrorInterceptor } from './interceptors/error-interceptor';
-import { API_URL } from '../helpers/helper';
 import { Backend } from './services/backend.service';
 import { PostService } from './services/post.service';
 import { AuthService } from './services/auth.service';
 import { AuthInterceptor } from './interceptors/auth-interceptor';
+import {API_URL} from '../helpers/helpers';
 
 @NgModule({
     imports: [

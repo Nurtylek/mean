@@ -1,0 +1,7 @@
+<div class="backdrop" (click)="close.emit()"></div>
+<div class="alert-box">
+    <p>{{ message }}</p>
+    <div class="alert-box__actions">
+        <button class="mat-raised-button" (click)="close.emit()">Close</button>
+    </div>
+</div>

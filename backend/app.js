@@ -12,7 +12,7 @@ const userRoutes = require("./routes/user");
 const app = express();
 app.use(morgan("dev"));
 
-mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@node-angular-rdwny.mongodb.net/${process.env.MONGO_DB}?retryWrites=true`,
+mongoose.connect('mongodb+srv://Nurtylek:AI8B8oe2AnGu4CYZ@node-angular-rdwny.mongodb.net/mean?retryWrites=true&w=majority',
     { useNewUrlParser: true } )
     .then(() => {
         console.log("Connected to database!");

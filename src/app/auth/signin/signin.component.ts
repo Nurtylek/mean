@@ -12,12 +12,18 @@ import {Subscription} from 'rxjs';
 export class SigninComponent extends Abstract implements OnInit, OnDestroy {
     isLoading = false;
     private loginSubs: Subscription;
+    authMessage: string;
 
     constructor(injector: Injector) {super(injector); }
 
     ngOnInit() {
         this.loginSubs = this.backend.authService.getAuthStatusListener().subscribe(loginStatus => {
             this.isLoading = false;
+        });
+
+        this.backend.authService.getAuthMessage().subscribe((resp: {message: string}) =>  {
+            this.authMessage = resp.message;
+            console.log(this.authMessage);
         });
     }
 
@@ -29,6 +35,11 @@ export class SigninComponent extends Abstract implements OnInit, OnDestroy {
             password: loginForm.value.password
         });
         this.backend.authService.login(model);
+        loginForm.resetForm();
+    }
+
+    closeModal() {
+        this.authMessage = null;
     }
 
     ngOnDestroy(): void {

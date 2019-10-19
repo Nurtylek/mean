@@ -1,7 +1,7 @@
 {
     "env": {
         "MONGO_USER": "Nurtylek",
-        "MONGO_PASSWORD": "1TpmDdIZ3Z4luXPg",
+        "MONGO_PASSWORD": "AI8B8oe2AnGu4CYZ",
         "MONGO_DB": "mean",
         "JWT_KEY": "this should be longer"
     }
