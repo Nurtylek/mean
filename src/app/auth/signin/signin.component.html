@@ -1,5 +1,6 @@
+<ng-template appPlaceholder></ng-template>
 <mat-card>
-    <app-alert [message]="authMessage" *ngIf="authMessage" (close)="closeModal()"></app-alert>
+<!--    <app-alert [message]="authMessage" *ngIf="authMessage" (close)="closeModal()"></app-alert>-->
     <form (ngSubmit)="onLogin(loginForm)" #loginForm="ngForm">
         <mat-form-field>
             <input matInput type="email" placeholder="email" name="email" ngModel #emailInput="ngModel" required email>

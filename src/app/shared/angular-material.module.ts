@@ -8,6 +8,7 @@ import {
     MatToolbarModule
 } from '@angular/material';
 import { AlertComponent } from './alert/alert.component';
+import { PlaceholderDirective } from './placeholder.directive';
 
 @NgModule({
     exports: [
@@ -19,9 +20,10 @@ import { AlertComponent } from './alert/alert.component';
         MatProgressSpinnerModule,
         MatPaginatorModule,
         MatDialogModule,
-        AlertComponent
+        PlaceholderDirective
     ],
-    declarations: [AlertComponent]
+    declarations: [AlertComponent, PlaceholderDirective],
+    entryComponents: [AlertComponent]
 })
 export class AngularMaterialModule {
 
